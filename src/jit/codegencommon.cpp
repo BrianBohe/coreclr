@@ -801,8 +801,11 @@ void Compiler::compChangeLife(VARSET_VALARG_TP newLife)
             JITDUMP("\t\t\t\t\t\t\tV%02u becoming live\n", varNum);
         }
 
+        // Build siVarLoc for this borning variable given the current stackLevel
+        CodeGenInterface::siVarLoc varLocation = codeGen->getSiVarLoc(varDsc, codeGen->getCurrentStackLevel());
+
         // Track for debugging that is live
-        varDsc->startLiveRangeFromEmitter(varDsc->lvRegNum, getEmitter());
+        varDsc->startLiveRangeFromEmitter(varDsc->lvRegNum, varLocation, getEmitter());
     }
 
     codeGen->siUpdate();
@@ -2367,7 +2370,7 @@ void CodeGen::genGenerateCode(void** codePtr, ULONG* nativeSizeOfCode)
         for (varNum = 0, varDsc = compiler->lvaTable; varNum < compiler->lvaCount; varNum++, varDsc++)
         {
             JITDUMP("Var %d:\n", varNum);
-            varDsc->dumpAllRegisterLiveRangesForBlock(getEmitter());
+            varDsc->dumpAllRegisterLiveRangesForBlock(getEmitter(), this);
             varDsc->destructRegisterLiveRanges();
         }
         JITDUMP("\n\n\n////////////////////////////////////////\n");
@@ -11648,3 +11651,8 @@ void CodeGen::genStackPointerCheck(bool doStackPointerCheck, unsigned lvaStackPo
 }
 
 #endif // defined(DEBUG) && defined(_TARGET_XARCH_)
+
+unsigned CodeGenInterface::getCurrentStackLevel() const
+{
+    return genStackLevel;
+}
