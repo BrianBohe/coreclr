@@ -512,8 +512,9 @@ public:
 
         // Helper functions
 
-        bool vlIsInReg(regNumber reg);
-        bool vlIsOnStk(regNumber reg, signed offset);
+        bool vlIsInReg(regNumber reg) const;
+        bool vlIsOnStk(regNumber reg, signed offset) const;
+        bool vlIsOnStack() const;
 
         siVarLoc(const LclVarDsc* varDsc, regNumber baseReg, int offset, bool isFramePointerUsed);
         siVarLoc(){};
