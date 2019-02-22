@@ -685,14 +685,14 @@ regMaskTP Compiler::compNoGCHelperCallKillSet(CorInfoHelpFunc helper)
 }
 
 //------------------------------------------------------------------------
-// compChangeLife: Update the GC's masks, register's masks and reports change on variable's homes given a set of 
+// compChangeLife: Update the GC's masks, register's masks and reports change on variable's homes given a set of
 //    current live variables.
 //
 // Arguments:
 //    newLife - the set of variables that are alive.
 //
 // Assumptions:
-//    The set of live variables reflects the result of only emitted code, it should not be considering the becoming 
+//    The set of live variables reflects the result of only emitted code, it should not be considering the becoming
 //    live/dead of instructions that has not been emitted yet. This is used to ensure [) "VariableLiveRange"
 //    intervals when calling "startVariableLiveRange" and "endVariableLiveRange".
 //
@@ -766,7 +766,7 @@ void Compiler::compChangeLife(VARSET_VALARG_TP newLife)
             {
                 codeGen->gcInfo.gcRegByrefSetCur &= ~regMask;
             }
-            
+
             codeGen->genUpdateRegLife(varDsc, false /*isBorn*/, true /*isDying*/ DEBUGARG(nullptr));
         }
         // This isn't in a register, so update the gcVarPtrSetCur.
@@ -814,7 +814,7 @@ void Compiler::compChangeLife(VARSET_VALARG_TP newLife)
             VarSetOps::AddElemD(this, codeGen->gcInfo.gcVarPtrSetCur, bornVarIndex);
             JITDUMP("\t\t\t\t\t\t\tV%02u becoming live\n", varNum);
         }
-        
+
         startVariableLiveRange(varDsc);
     }
 
@@ -2386,7 +2386,7 @@ void CodeGen::genGenerateCode(void** codePtr, ULONG* nativeSizeOfCode)
         printf("////////////////////////////////////////\n\n\n");
     }
 #endif
-    
+
 #ifdef LATE_DISASM
     unsigned finalHotCodeSize;
     unsigned finalColdCodeSize;
@@ -10602,11 +10602,10 @@ void CodeGen::genSetScopeInfo()
         return;
     }
 
-    //noway_assert(compiler->opts.compScopeInfo && (compiler->info.compVarScopesCount > 0));
-    //noway_assert(psiOpenScopeList.scNext == nullptr);
+    // noway_assert(compiler->opts.compScopeInfo && (compiler->info.compVarScopesCount > 0));
+    // noway_assert(psiOpenScopeList.scNext == nullptr);
 
-
-    //unsigned scopeCnt = siScopeCnt + psiScopeCnt;
+    // unsigned scopeCnt = siScopeCnt + psiScopeCnt;
 
     compiler->eeSetLVcount(amountLiveRanges);
 
@@ -10683,16 +10682,17 @@ void CodeGen::genSetScopeInfo()
     */
 
     unsigned int varNum;
-    LclVarDsc *varDsc;
+    LclVarDsc*   varDsc;
     unsigned int liveRangeIndex = 0;
 
     for (varDsc = compiler->lvaTable, varNum = 0; varNum < compiler->lvaCount; varNum++, varDsc++)
     {
         LiveRangeList* liveRanges = varDsc->getLiveRanges();
-        
+
         if (compiler->compMap2ILvarNum(varNum) != (unsigned int)ICorDebugInfo::UNKNOWN_ILNUM)
         {
-            for (LiveRangeListIterator itLiveRanges = liveRanges->begin(); itLiveRanges != liveRanges->end(); itLiveRanges++, liveRangeIndex++)
+            for (LiveRangeListIterator itLiveRanges = liveRanges->begin(); itLiveRanges != liveRanges->end();
+                 itLiveRanges++, liveRangeIndex++)
             {
                 UNATIVE_OFFSET startOffs = itLiveRanges->startEmitLocation.CodeOffset(getEmitter());
                 UNATIVE_OFFSET endOffs   = itLiveRanges->endEmitLocation.CodeOffset(getEmitter());
@@ -10711,10 +10711,11 @@ void CodeGen::genSetScopeInfo()
                     endOffs++;
                 }
 
-                genSetScopeInfo(liveRangeIndex, startOffs, endOffs - startOffs, varNum, varNum /* I dont know what is the which in eeGetLvInfo */, true, &itLiveRanges->varLocation);
+                genSetScopeInfo(liveRangeIndex, startOffs, endOffs - startOffs, varNum,
+                                varNum /* I dont know what is the which in eeGetLvInfo */, true,
+                                &itLiveRanges->varLocation);
             }
         }
-
     }
 
     compiler->eeSetLVdone();

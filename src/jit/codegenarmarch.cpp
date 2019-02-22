@@ -2178,7 +2178,7 @@ void CodeGen::genRegCopy(GenTree* treeNode)
                 gcInfo.gcMarkRegSetNpt(genRegMask(op1->gtRegNum));
 
                 genUpdateVarReg(varDsc, treeNode);
-                
+
                 // Report the home change for this variable
                 compiler->updateVariableLiveRange(varDsc);
 
