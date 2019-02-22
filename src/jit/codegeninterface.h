@@ -535,7 +535,7 @@ public:
 public:
     void dumpSiVarLoc(const siVarLoc* varLoc) const;
     siVarLoc getSiVarLoc(const LclVarDsc* varDsc, unsigned int stackLevel) const;
-    
+
     unsigned getCurrentStackLevel() const;
 
 protected:
