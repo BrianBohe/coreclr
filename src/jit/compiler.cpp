@@ -11098,7 +11098,7 @@ unsigned int Compiler::getAmountLiveRangesReported()
     unsigned int varNum, amountOfLiveRanges = 0;
     LclVarDsc*   varDsc = lvaTable;
 
-    for (varNum = 0, varDsc = lvaTable; varNum < lvaCount; varNum++, varDsc++)
+    for (varNum = 0, varDsc = lvaTable; varNum < info.compLocalsCount; varNum++, varDsc++)
     {
         if (compMap2ILvarNum(varNum) != (unsigned int)ICorDebugInfo::UNKNOWN_ILNUM)
         {
@@ -11131,9 +11131,10 @@ unsigned int Compiler::getAmountLiveRangesReported()
 //    or both.
 void Compiler::startOrCloseVariableLiveRange(const LclVarDsc* varDsc, bool isBorning, bool isDying)
 {
-    // Only the variables that exists in the IL will be seen by the debugger.
-    // This are locals and arguments, and are counted in "lvaCount".
-    if (varDsc->lvSlotNum < lvaCount)
+    // Only the variables that exists in the IL, "this, and special arguments 
+    // will be reported. This are locals and arguments, and are counted in
+    // "info.compLocalsCount".
+    if (varDsc->lvSlotNum < info.compLocalsCount)
     {
         if (isBorning && !isDying)
         {
@@ -11164,9 +11165,10 @@ void Compiler::startOrCloseVariableLiveRange(const LclVarDsc* varDsc, bool isBor
 //    This method should be called on every place a Variable is becoming alive.
 void Compiler::startVariableLiveRange(const LclVarDsc* varDsc)
 {
-    // Only the variables that exists in the IL will be seen by the debugger.
-    // This are locals and arguments, and are counted in "lvaCount".
-    if (varDsc->lvSlotNum < lvaCount)
+    // Only the variables that exists in the IL, "this, and special arguments 
+    // will be reported. This are locals and arguments, and are counted in
+    // "info.compLocalsCount".
+    if (varDsc->lvSlotNum < info.compLocalsCount)
     {
         // Build siVarLoc for this borning "varDsc"
         CodeGenInterface::siVarLoc varLocation = codeGen->getSiVarLoc(varDsc, codeGen->getCurrentStackLevel());
@@ -11191,9 +11193,10 @@ void Compiler::startVariableLiveRange(const LclVarDsc* varDsc)
 //    This method should be called on every place a Variable is becoming dead.
 void Compiler::endVariableLiveRange(const LclVarDsc* varDsc)
 {
-    // Only the variables that exists in the IL will be seen by the debugger.
-    // This are locals and arguments, and are counted in "lvaCount".
-    if (varDsc->lvSlotNum < lvaCount)
+    // Only the variables that exists in the IL, "this, and special arguments 
+    // will be reported. This are locals and arguments, and are counted in
+    // "info.compLocalsCount".
+    if (varDsc->lvSlotNum < info.compLocalsCount)
     {
         // "varDsc" live range is no more valid from this point
         varDsc->endLiveRangeAtEmitter(getEmitter());
@@ -11216,9 +11219,10 @@ void Compiler::endVariableLiveRange(const LclVarDsc* varDsc)
 //    This method should be called on every place a Variable is changing its home.
 void Compiler::updateVariableLiveRange(const LclVarDsc* varDsc)
 {
-    // Only the variables that exists in the IL will be seen by the debugger.
-    // This are locals and arguments, and are counted in "lvaCount".
-    if (varDsc->lvSlotNum < lvaCount)
+    // Only the variables that exists in the IL, "this, and special arguments 
+    // will be reported. This are locals and arguments, and are counted in
+    // "info.compLocalsCount".
+    if (varDsc->lvSlotNum < info.compLocalsCount)
     {
         // Build the location of the variable
         CodeGenInterface::siVarLoc siVarLoc = codeGen->getSiVarLoc(varDsc, codeGen->getCurrentStackLevel());
@@ -11242,7 +11246,7 @@ void Compiler::dumpBlockVariableLiveRanges(const BasicBlock* block)
     unsigned   varNum;
     LclVarDsc* varDsc;
 
-    for (varNum = 0, varDsc = lvaTable; varNum < lvaCount; varNum++, varDsc++)
+    for (varNum = 0, varDsc = lvaTable; varNum < info.compLocalsCount; varNum++, varDsc++)
     {
         if (varDsc->hasBeenAlive())
         {
