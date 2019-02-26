@@ -10593,9 +10593,9 @@ void CodeGen::genSetScopeInfo()
     }
 #endif
 
-    unsigned int amountLiveRanges = compiler->getAmountLiveRangesReported();
+    unsigned int liveRangesCount = compiler->getLiveRangesCount();
 
-    if (amountLiveRanges == 0)
+    if (liveRangesCount == 0)
     {
         compiler->eeSetLVcount(0);
         compiler->eeSetLVdone();
@@ -10607,13 +10607,13 @@ void CodeGen::genSetScopeInfo()
     noway_assert(psiOpenScopeList.scNext == nullptr);
     // unsigned scopeCnt = siScopeCnt + psiScopeCnt;
 
-    compiler->eeSetLVcount(amountLiveRanges);
+    compiler->eeSetLVcount(liveRangesCount);
 
 #ifdef DEBUG
-    genTrnslLocalVarCount = amountLiveRanges;
-    if (amountLiveRanges)
+    genTrnslLocalVarCount = liveRangesCount;
+    if (liveRangesCount)
     {
-        genTrnslLocalVarInfo = new (compiler, CMK_DebugOnly) TrnslLocalVarInfo[amountLiveRanges];
+        genTrnslLocalVarInfo = new (compiler, CMK_DebugOnly) TrnslLocalVarInfo[liveRangesCount];
     }
 #endif
 

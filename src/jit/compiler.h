@@ -2132,7 +2132,7 @@ class Compiler
     */
 
 public:
-    unsigned int getAmountLiveRangesReported();
+    unsigned int getLiveRangesCount();
 
     hashBvGlobalData hbvGlobalData; // Used by the hashBv bitvector package.
 
