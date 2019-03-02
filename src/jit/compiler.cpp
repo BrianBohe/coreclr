@@ -11288,7 +11288,7 @@ void Compiler::siEndAllVariableLiveRange(VARSET_VALARG_TP varsToClose)
     {
         unsigned         lclNum = lvaTrackedToVarNum[varIndex];
         const LclVarDsc* lclVar = &lvaTable[lclNum];
-        assert(lclVar->hasBeenAlive());
+        
         siEndVariableLiveRange(lclVar);
     }
 
