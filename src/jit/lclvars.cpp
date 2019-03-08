@@ -1399,7 +1399,7 @@ unsigned Compiler::compMapILvarNum(unsigned ILvarNum)
  * Returns UNKNOWN_ILNUM if it can't be mapped.
  */
 
-unsigned Compiler::compMap2ILvarNum(unsigned varNum)
+unsigned Compiler::compMap2ILvarNum(unsigned varNum) const
 {
     if (compIsForInlining())
     {
