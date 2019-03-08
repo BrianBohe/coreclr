@@ -317,6 +317,9 @@ public:
     // Dump just the emitLocation as they are, we haven't generated the whole method yet
     void dump(const CodeGenInterface* codeGen) const
     {
+        // "codeGen" will be dereferenced
+        noway_assert(codeGen != nullptr);
+
         codeGen->dumpSiVarLoc(&varLocation);
         printf(" [ ");
         startEmitLocation.Print();
@@ -357,12 +360,18 @@ struct LiveRangeBarrier
 
     LiveRangeBarrier(LiveRangeList* list)
     {
+        // "list" should be a valid pointer
+        noway_assert(list != nullptr);
+
         haveReadAtLeastOneOfBlock = false;
         beginLastBlock            = list->end();
     }
 
     void reset(LiveRangeList* list)
     {
+        // "list" should be a valid pointer
+        noway_assert(list != nullptr);
+
         // There must have reported something in order to reset
         noway_assert(haveReadAtLeastOneOfBlock);
 
@@ -420,6 +429,7 @@ public:
     // Modified the barrier to print on next block only just that changes
     void endBlockLiveRanges()
     {
+        noway_assert(variableLifeBarrier != nullptr);
         // barrier now points to nullptr
         variableLifeBarrier->reset(variableLiveRanges);
     }
@@ -427,11 +437,17 @@ public:
     // Returns true if a live range for this variable has been recorded from last call to EndBlock
     bool hasBeenAlive() const
     {
+        // "variableLifeBarrier" should has been initialized
+        noway_assert(variableLifeBarrier != nullptr);
+
         return variableLifeBarrier->haveReadAtLeastOneOfBlock;
     }
 
     void dumpRegisterLiveRangesForBlockBeforeCodeGenerated(const CodeGenInterface* codeGen) const
     {
+        // "variableLifeBarrier" should has been initialized
+        noway_assert(variableLifeBarrier != nullptr);
+
         if (hasBeenAlive())
         {
             printf("[");
@@ -450,6 +466,9 @@ public:
 
     void dumpAllRegisterLiveRangesForBlock(emitter* _emitter, const CodeGenInterface* codeGen) const
     {
+        // "variableLiveRanges" should has been initialized
+        noway_assert(variableLiveRanges);
+
         if (variableLiveRanges->empty())
         {
             printf("None history\n");
@@ -505,6 +524,9 @@ public:
 
     LiveRangeListIterator getLiveRangesIterator() const
     {
+        // "variableLiveRanges" should has been initialized
+        noway_assert(variableLiveRanges != nullptr);
+
         return variableLiveRanges->begin();
     }
 
@@ -2184,6 +2206,7 @@ public:
 
     DWORD expensiveDebugCheckLevel;
     void dumpBlockVariableLiveRanges(const BasicBlock* block);
+    void dumpLvaVariableLiveRanges() const;
 #endif
 
 #if FEATURE_MULTIREG_RET
@@ -7339,7 +7362,7 @@ public:
     // the setter on CodeGenContext directly.
 
     __declspec(property(get = getEmitter)) emitter* genEmitter;
-    emitter* getEmitter()
+    emitter* getEmitter() const
     {
         return codeGen->getEmitter();
     }
@@ -9049,9 +9072,9 @@ public:
 
     unsigned compArgSize; // total size of arguments in bytes (including register args (lvIsRegArg))
 
-    unsigned compMapILargNum(unsigned ILargNum); // map accounting for hidden args
-    unsigned compMapILvarNum(unsigned ILvarNum); // map accounting for hidden args
-    unsigned compMap2ILvarNum(unsigned varNum);  // map accounting for hidden args
+    unsigned compMapILargNum(unsigned ILargNum);      // map accounting for hidden args
+    unsigned compMapILvarNum(unsigned ILvarNum);      // map accounting for hidden args
+    unsigned compMap2ILvarNum(unsigned varNum) const; // map accounting for hidden args
 
     //-------------------------------------------------------------------------
 
@@ -9121,7 +9144,7 @@ public:
 #endif // LOOP_HOIST_STATS
 
     bool compIsForImportOnly();
-    bool compIsForInlining();
+    bool compIsForInlining() const;
     bool compDonotInline();
 
 #ifdef DEBUG
