@@ -510,7 +510,7 @@ protected:
 
 #ifdef _TARGET_ARM64_
     virtual void SetSaveFpLrWithAllCalleeSavedRegisters(bool value);
-    virtual bool IsSaveFpLrWithAllCalleeSavedRegisters();
+    virtual bool IsSaveFpLrWithAllCalleeSavedRegisters() const;
     bool         genSaveFpLrWithAllCalleeSavedRegisters;
 #endif // _TARGET_ARM64_
 
@@ -745,7 +745,9 @@ protected:
 
     void psiEndPrologScope(psiScope* scope);
 
-    void psSetScopeOffset(psiScope* newScope, LclVarDsc* lclVarDsc1);
+    void psiSetScopeOffset(psiScope* newScope, const LclVarDsc* lclVarDsc1) const;
+
+    NATIVE_OFFSET psiGetVarStackOffset(const LclVarDsc* lclVarDsc) const;
 
 /*****************************************************************************
  *                        TrnslLocalVarInfo
