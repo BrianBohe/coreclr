@@ -602,6 +602,22 @@ public:
         noway_assert(!variableLiveRanges->back().endEmitLocation.Valid());
     }
 
+    //------------------------------------------------------------------------
+    // getLastVarLocation: Return the last reported position of the variable.
+    //
+    // Return Value:
+    //  The last "siVarLoc" position where the variable was (or is if the last "VariableLiveRange" 
+    //  has not been closed).
+    // Notes:
+    //  There has to be at least one.
+    CodeGenInterface::siVarLoc getLastVarLocation() const
+    {
+        // There should have at least one VariableLiveRange reported for this variable
+        noway_assert(variableLiveRanges != nullptr && !variableLiveRanges->empty());
+
+        return variableLiveRanges->back().varLocation;
+    }
+
     // note this only packs because var_types is a typedef of unsigned char
     var_types lvType : 5; // TYP_INT/LONG/FLOAT/DOUBLE/REF
 
@@ -3282,7 +3298,7 @@ public:
     unsigned lvaFrameSize(FrameLayoutState curState);
 
     // Returns the caller-SP-relative offset for the SP/FP relative offset determined by FP based.
-    int lvaToCallerSPRelativeOffset(int offs, bool isFpBased);
+    int lvaToCallerSPRelativeOffset(int offs, bool isFpBased) const;
 
     // Returns the caller-SP-relative offset for the local variable "varNum."
     int lvaGetCallerSPRelativeOffset(unsigned varNum);
@@ -7400,6 +7416,12 @@ public:
 
     // Close all the "VariableLiveRanges" that are indicated in the given set
     void siEndAllVariableLiveRange(const VARSET_TP* varsToClose);
+    
+    // Open a "VariableLiveRange" for the given parameter "lclVarDsc" in the given "varLocation"
+    void psiStartVariableLiveRange(CodeGenInterface::siVarLoc varLocation, const LclVarDsc *lclVarDsc);
+
+    // Close all the open "VariableLiveRanges" after prolog has been generated
+    void psiClosePrologVariableRanges();
 
     bool lastBasicBlockHasBeenEmited; // When true no more siEndVariableLiveRange is considered.
                                       // No update/start happens when code has been generated.

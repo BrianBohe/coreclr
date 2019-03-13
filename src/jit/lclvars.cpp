@@ -7338,7 +7338,7 @@ int Compiler::lvaGetCallerSPRelativeOffset(unsigned varNum)
     return lvaToCallerSPRelativeOffset(varDsc->lvStkOffs, varDsc->lvFramePointerBased);
 }
 
-int Compiler::lvaToCallerSPRelativeOffset(int offset, bool isFpBased)
+int Compiler::lvaToCallerSPRelativeOffset(int offset, bool isFpBased) const
 {
     assert(lvaDoneFrameLayout == FINAL_FRAME_LAYOUT);
 

@@ -171,14 +171,14 @@ public:
     }
 
 public:
-    int genCallerSPtoFPdelta();
-    int genCallerSPtoInitialSPdelta();
-    int genSPtoFPdelta();
-    int genTotalFrameSize();
+    int genCallerSPtoFPdelta() const;
+    int genCallerSPtoInitialSPdelta() const;
+    int genSPtoFPdelta() const;
+    int genTotalFrameSize() const;
 
 #ifdef _TARGET_ARM64_
     virtual void SetSaveFpLrWithAllCalleeSavedRegisters(bool value) = 0;
-    virtual bool IsSaveFpLrWithAllCalleeSavedRegisters()            = 0;
+    virtual bool IsSaveFpLrWithAllCalleeSavedRegisters() const      = 0;
 #endif // _TARGET_ARM64_
 
     regNumber genGetThisArgReg(GenTreeCall* call) const;
@@ -515,6 +515,9 @@ public:
         bool vlIsInReg(regNumber reg) const;
         bool vlIsOnStk(regNumber reg, signed offset) const;
         bool vlIsOnStack() const;
+
+        void storeVariableOnRegisters(regNumber reg, regNumber otherReg);
+        void storeVariableOnStack(regNumber stackBaseReg, NATIVE_OFFSET variableStackOffset);
 
         siVarLoc(const LclVarDsc* varDsc, regNumber baseReg, int offset, bool isFramePointerUsed);
         siVarLoc(){};
