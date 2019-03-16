@@ -561,6 +561,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     void genSetScopeInfoUsingsiScope();
 #endif
 
+#ifdef USING_SCOPE_INFO
 protected:
     /*
     XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -748,7 +749,7 @@ protected:
     void psiEndPrologScope(psiScope* scope);
 
     void psSetScopeOffset(psiScope* newScope, LclVarDsc* lclVarDsc1);
-
+#endif
 /*****************************************************************************
  *                        TrnslLocalVarInfo
  *
