@@ -10495,6 +10495,7 @@ void CodeGen::genSetScopeInfo()
 
     if (compiler->info.compVarScopesCount == 0)
     {
+        // No variable home to report
         compiler->eeSetLVcount(0);
         compiler->eeSetLVdone();
         return;
@@ -10506,6 +10507,7 @@ void CodeGen::genSetScopeInfo()
     unsigned i;
     unsigned scopeCnt = siScopeCnt + psiScopeCnt;
 
+    // Initialize the table where the reported variables' home will be placed
     compiler->eeSetLVcount(scopeCnt);
 
 #ifdef DEBUG
