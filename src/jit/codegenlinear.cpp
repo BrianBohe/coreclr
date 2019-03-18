@@ -199,6 +199,8 @@ void CodeGen::genCodeForBBlist()
 
         compiler->m_pLinearScan->recordVarLocationsAtStartOfBB(block);
 
+        // Updating variable liveness after last instruction of previous block was emitted
+        // and before first of the current block is emitted
         genUpdateLife(block->bbLiveIn);
 
         // Even if liveness didn't change, we need to update the registers containing GC references.
@@ -723,7 +725,8 @@ void CodeGen::genCodeForBBlist()
 
     } //------------------ END-FOR each block of the method -------------------
 
-    /* Nothing is live at this point */
+    // There could be variables alive at this point. For example see lvaKeepAliveAndReportThis.
+    // This call is for cleaning the GC refs
     genUpdateLife(VarSetOps::MakeEmpty(compiler));
 
     /* Finalize the spill  tracking logic */
@@ -1796,6 +1799,7 @@ void CodeGen::genProduceReg(GenTree* tree)
         }
     }
 
+    // Updating variable liveness after instruction was emitted
     genUpdateLife(tree);
 
     // If we've produced a register, mark it as a pointer, as needed.
