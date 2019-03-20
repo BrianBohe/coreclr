@@ -3045,6 +3045,12 @@ public:
         return &lvaTable[lclVar->GetLclNum()];
     }
 
+    unsigned int lvaGetVarNum(const LclVarDsc* varDsc)
+    {
+        assert(varDsc != nullptr);
+        return (unsigned int)(varDsc - lvaTable);
+    }
+
     unsigned lvaLclSize(unsigned varNum);
     unsigned lvaLclExactSize(unsigned varNum);
 
